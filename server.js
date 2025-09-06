@@ -9,6 +9,7 @@ connectDB();
 
 app.use(express.json());
 app.use("/api/auth", require("./routes/authRouter"));
+app.use("/api/tasks", require("./routes/taskRouter"));
 
 
 app.get("/", (req, res) => {
