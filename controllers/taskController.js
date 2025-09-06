@@ -4,7 +4,7 @@ const Task = require("../models/Task")
 exports.createTask = async (req,res)=>{
     try{
         const task = await Task.create({...req.body, user: req.userId});
-        res.status(201).json({task})
+        res.status(201).json({msg: "Task is Created", task})
     }catch(err){
         res.status(500).json({error: err.message});
     }
@@ -26,3 +26,33 @@ exports.updateTask = async(req,res)=>{
         res.status(400).json({msg: "task not updated", status: false});
     }
 };
+
+exports.deleteTask = async (req, res)=>{
+    const delTask = await Task.findOneAndDelete({_id: req.params.id, user: req.userId},{new: true});
+    if(delTask){
+        res.status(200).json({msg: "task is deleted", delTask});
+    }else{
+        res.status(400).json({msg: "Invalid reques", status: false});
+    }
+}
+
+exports.updateStatus = async (req,res)=>{
+    try{
+    // let task = await Task.findById(req.params.id);
+
+    const updateTask = await Task.findOneAndUpdate(
+    {_id: req.params.id, user: req.userId},
+    {status: req.body.status}, {new: true}
+);
+
+
+    if(updateTask){
+        res.status(200).json({msg: "update Status", updateTask});
+    }else{
+        res.status(404).json({msg: "Task not found or unauthorized", status: false})
+    }
+
+    }catch(err){
+        res.status(500).json({msg: "Internal server error", status: false});
+    }
+}
