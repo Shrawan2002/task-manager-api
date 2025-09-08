@@ -38,11 +38,10 @@ exports.deleteTask = async (req, res)=>{
 
 exports.updateStatus = async (req,res)=>{
     try{
-    // let task = await Task.findById(req.params.id);
-
+  
     const updateTask = await Task.findOneAndUpdate(
-    {_id: req.params.id, user: req.userId},
-    {status: req.body.status}, {new: true}
+          {_id: req.params.id, user: req.userId},
+          {status: req.body.status}, {new: true}
 );
 
 
@@ -55,4 +54,22 @@ exports.updateStatus = async (req,res)=>{
     }catch(err){
         res.status(500).json({msg: "Internal server error", status: false});
     }
+}
+
+exports.updatePriority = async (req,res)=>{
+   try{
+     const updateTask = await Task.findOneAndUpdate(
+        {_id: req.params.id, user: req.userId},
+        {priority: req.body.priority},
+        {new: true}
+     );
+
+     if(updateTask){
+        res.status(200).json({msg: "priority is updated", updateTask});
+     }else{
+        res.status(404).json({msg: "task is not found", status: false});
+     }
+   }catch(err){
+    res.status(500).json({msg: "Internal server error", status: false})
+   }
 }
