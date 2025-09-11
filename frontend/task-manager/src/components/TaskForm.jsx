@@ -2,7 +2,7 @@ import { useState } from "react"
 import API from "../api";
 
 
-export default function TaskForm(){
+export default function TaskForm({onTaskCreated}){
 
     const [formData, setFormData] = useState({
         title: "",
@@ -22,6 +22,8 @@ export default function TaskForm(){
     const handleSubmit = async (event)=>{
         event.preventDefault();
         const res = await API.post("/tasks", formData);
+        onTaskCreated(res.data);
+        setFormData({title: "", description: "", priority: "medium" , status: "pending", dueDate: "" })
     }
     return (
         <form onSubmit={handleSubmit} className="bg-white p-4  rounded shadow mb-4  flex flex-col gap-3">

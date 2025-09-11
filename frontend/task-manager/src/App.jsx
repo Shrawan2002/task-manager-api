@@ -2,6 +2,7 @@
 import './App.css'
 import Navbar from './components/navbar'
 import TaskForm from './components/TaskForm'
+import TaskList from './components/taskList'
 import Login from './pages/Login'
 import Register from './pages/register'
 
@@ -13,7 +14,8 @@ function App() {
      {/* <Navbar /> */}
      {/* <Register /> */}
      {/* <Login /> */}
-     <TaskForm />
+     {/* <TaskForm /> */}
+     <TaskList />
   </div>
   )
 }
