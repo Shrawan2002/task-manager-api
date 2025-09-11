@@ -27,6 +27,18 @@ export default function TaskList({tasks, setTasks}){
 }, []);
 
     return (
-        <div>Hello</div>
+        <div className="space-y-3">
+          {tasks.map((task)=> (
+              <div key={task._id} className="bg-white p-4 rounded shadow flex justify-between items-center">
+                <div>
+                  <h3 className="font-bold">{task.title}</h3>
+                  <p>{task.description}</p>
+                  <p className="text-sm">Priority: {task.priority}</p>
+                  <p className="text-sm">Status: {task.status} </p>
+                </div>
+            ))
+          }
+        </div>
+        </div>
     )
 }
