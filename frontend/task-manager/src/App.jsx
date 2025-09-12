@@ -1,23 +1,21 @@
-
-import './App.css'
-import Navbar from './components/navbar'
-import TaskForm from './components/TaskForm'
-import TaskList from './components/taskList'
-import Login from './pages/Login'
-import Register from './pages/register'
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import Tasks from "./pages/Tasks";
 
 function App() {
+  const isAuth = !!localStorage.getItem("token");
 
   return (
-  <div>
-     <h1 className='bg-green-400'>task manager</h1>
-     {/* <Navbar /> */}
-     {/* <Register /> */}
-     {/* <Login /> */}
-     {/* <TaskForm /> */}
-     <TaskList />
-  </div>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={isAuth ? <Navigate to="/tasks" /> : <Navigate to="/login" />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/tasks" element={isAuth ? <Tasks /> : <Navigate to="/login" />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

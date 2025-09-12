@@ -22,6 +22,7 @@ export default function TaskForm({onTaskCreated}){
     const handleSubmit = async (event)=>{
         event.preventDefault();
         const res = await API.post("/tasks", formData);
+        console.log(res.data);
         onTaskCreated(res.data);
         setFormData({title: "", description: "", priority: "medium" , status: "pending", dueDate: "" })
     }
@@ -29,7 +30,7 @@ export default function TaskForm({onTaskCreated}){
         <form onSubmit={handleSubmit} className="bg-white p-4  rounded shadow mb-4  flex flex-col gap-3">
             <h2 className="text-xl font-bold mb-4 text-center">Create Task</h2>
             <input type="text" value={formData.title} onChange={handleChange} className="border p-2 w-full "  name="title" placeholder="Task title"  required />
-            <textarea value={formData.description} onClick={handleChange} className="border p-2 w-full " name="description"  placeholder="Description" />
+            <textarea value={formData.description} onChange={handleChange} className="border p-2 w-full " name="description"  placeholder="Description" />
              {/* 🔑 Priority & Status on the same horizontal line */}
             <div className="flex gap-3">
                 <select name="priority"
@@ -57,6 +58,7 @@ export default function TaskForm({onTaskCreated}){
              onChange={handleChange}
              className="border p-2 w-full"
             />
+            <button className="bg-blue-500 text-white rounded p-2">Create Task</button>
         </form>
     )
 }

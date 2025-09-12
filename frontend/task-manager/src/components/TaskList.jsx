@@ -1,44 +1,51 @@
-import { useEffect, useState } from "react"
 import API from "../api";
+import React from "react";
 
-export default function TaskList({tasks, setTasks}){
-    const [tasks, setTasks] = useState([]);
+export default function TaskList({tasks,setTasks}){
 
-    useEffect(() => {
-  const fetchTasks = async () => {
-    try {
-      const res = await API.get("/tasks");
-      console.log(res.data); // success case
-    } catch (err) {
-      if (err.response) {
-        // Server responded with status code (401, 500, etc.)
-        console.log("Server error:", err.response.data.error);
-      } else if (err.request) {
-        // Request made, no response
-        console.log("No response received:", err.request);
-      } else {
-        // Something else went wrong in setting up request
-        console.log("Error setting up request:", err.message);
-      }
-    }
-  };
+  const updateStatus = async(id, status)=>{
+    const res = await API.put(`/tasks/${id}`, status);
+    setTasks((tasks)=>(
+      tasks.map((data)=> data._id === id ? res.data.task : data)
+    ))
+  }
 
-  fetchTasks();
-}, []);
+  const deleteTask = async(id)=>{
+    await API.delete(`/tasks/${id}`);
+    setTasks((tasks)=>(
+      tasks.filter((data)=> data._id !== id)
+    ))
+  }
+  return(
+    <div>
+      {tasks.map((task)=>(
+         <div
+          key={task._id}
+          className="bg-white p-4 rounded shadow flex justify-between items-center"
+        >
+          <div>
+            <h3 className="font-bold">{task.title}</h3>
+            <p>{task.description}</p>
+            <p className="text-sm">Priority: {task.priority}</p>
+            <p className="text-sm">Status: {task.status}</p>
 
-    return (
-        <div className="space-y-3">
-          {tasks.map((task)=> (
-              <div key={task._id} className="bg-white p-4 rounded shadow flex justify-between items-center">
-                <div>
-                  <h3 className="font-bold">{task.title}</h3>
-                  <p>{task.description}</p>
-                  <p className="text-sm">Priority: {task.priority}</p>
-                  <p className="text-sm">Status: {task.status} </p>
-                </div>
-            ))
-          }
+            {/* 🔑 Show due date (formatted) */}
+            {task.dueDate && (
+              <p className="text-sm text-gray-600">
+                Due: {new Date(task.dueDate).toLocaleDateString()}
+              </p>
+            )}
+          </div>
+          <div className="space-x-2">
+            <button onClick={ ()=> updateStatus(task._id, {status: task.status === "pending"? "done": "pending"})}>
+              {task.status === "pending" ? "Mark Done" : "Mark Pending"}
+            </button>
+            <button onClick={()=> deleteTask(task._id)}>
+              Delete
+            </button>
+          </div>
         </div>
-        </div>
-    )
+      ))}
+    </div>
+  )
 }
