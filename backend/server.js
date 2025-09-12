@@ -13,10 +13,10 @@ app.use("/api/auth", require("./routes/authRouter"));
 app.use("/api/tasks", require("./routes/taskRouter"));
 
 
-// app.get("/", (req, res) => {
-//   res.send("API running...");
-// });
-// const PORT = process.env.PORT || 5000;
-// app.listen(PORT,()=>{
-//     console.log(`server is running on port ${PORT}`);
-// })
+app.get("/", (req, res) => {
+  res.send("API running...");
+});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT,()=>{
+    console.log(`server is running on port ${PORT}`);
+})
